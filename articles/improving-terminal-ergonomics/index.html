@@ -26,8 +26,8 @@
       <p>Only 3 lines are displayed for brevity. Each history result has one of two characters:</p>
 
       <ul>
-        <li>◆ for a successful command.</li>
-        <li><strong>◇</strong> for a failed command.</li>
+        <li class="successful">a successful command.</li>
+        <li class="failed">a failed command.</li>
       </ul>
 
       <p>The app uses SQLite for history. I found that Zsh does not store history as UTF-8, so we can avoid mangling any Chinese characters while using SQLite. </p>
