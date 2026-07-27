@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Improving terminal ergonomics</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main>
+    <p><a href="index.html">Back to all articles</a></p>
+    <article>
+      <h1>Improving terminal ergonomics</h1>
+
+      <p>Most commands are repeated. We need a way to get autosuggestions. Ghost-style <code>zsh-autosuggestions</code> works, but it relies on exact prefix matches. Atuin can show history on <code>Ctrl-R</code>. A small Python TUI attached to Zsh hooks can bring that search into the command line as you type.</p>
+
+      <p>Each TUI is an interface to one shared daemon. The daemon keeps history in memory and serves search responses over a local socket, so each prompt can query the same process.</p>
+
+      <p>The search is fuzzy. It keeps the useful parts of history visible even when the command starts somewhere in the middle of what you remember.</p>
+
+      <figure>
+        <img src="fuzzy.png" alt="A terminal showing fuzzy command results for lsof volume">
+        <figcaption>Fuzzy history search keeps related commands close to the current query.</figcaption>
+      </figure>
+
+      <p>Only 3 lines are displayed for brevity. Each history result has one of two characters:</p>
+
+      <ul>
+        <li>◆ for a successful command.</li>
+        <li><strong>◇</strong> for a failed command.</li>
+      </ul>
+
+      <p>The app uses SQLite for history. I found that Zsh does not store history as UTF-8, so we can avoid mangling any Chinese characters while using SQLite. </p>
+
+      <p>The ranking also uses context. Commands run in the current directory come first. Commands with the typed prefix follow. The remaining fuzzy matches come after them.</p>
+
+      <p>What about runtime completions? The TUI can detect a path in the current command, inspect that directory, and show matching files and folders in a different color.</p>
+
+      <figure>
+        <img src="runtime.png" alt="A terminal showing runtime path completions in a different color">
+        <figcaption>Runtime path completions appear alongside history matches and use their own color.</figcaption>
+      </figure>
+
+      <p>Syntax highlighting is included, so commands are easier to scan before they run.</p>
+
+      <p>Terminal input has carried mouse events for years. A command line should use them. The app lets you click into a command, move the cursor, and overwrite text without any option clicks.</p>
+
+      <figure>
+        <img src="mouse-support.png" alt="A terminal command with text selected by the mouse">
+        <figcaption>Mouse support makes selection and cursor movement part of the command line.</figcaption>
+      </figure>
+
+      <p>So far, this CLI has had no commands by design. The space key is easy to reach. Set <code>ZSH_FLEX_HISTORY_EMPTY_SPACE_COMMAND</code> to any command, then press Space on an empty input to launch it immediately. Helix is shown here.</p>
+
+      <figure>
+        <img src="space-mode.gif" alt="An animated terminal showing space mode launching a command">
+        <figcaption>Space mode turns an empty command line into a quick launcher.</figcaption>
+      </figure>
+
+      <p><a href="https://github.com/AIex7/zsh-mouse-and-flex-search">AIex7/zsh-mouse-and-flex-search</a></p>
+    </article>
+  </main>
+</body>
+</html>
