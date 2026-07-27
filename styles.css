@@ -57,10 +57,7 @@ a {
   padding: 0;
 }
 
-.article-list li::before {
-  content: "*";
-  display: inline-block;
-  width: 1.4em;
+.article-marker {
   color: var(--doric-magenta);
 }
 
